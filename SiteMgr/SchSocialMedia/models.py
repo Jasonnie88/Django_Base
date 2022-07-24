@@ -1,7 +1,9 @@
 from django.db import models
 
+
 # Create your models here.
 class Article(models.Model):
+    objects = models.Manager()
     name = models.CharField(max_length=20, verbose_name='名称')
     content = models.CharField(max_length=300, verbose_name="文章内容")
     pub_date = models.DateField(verbose_name='发布日期', null=True)
@@ -36,14 +38,17 @@ class PeopleInfo(models.Model):
     def __str__(self):
         return self.name
 
+
 class ArticleComments(models.Model):
     comment = models.CharField(max_length=200, null=True, verbose_name='文章评论')
-    article = models.ForeignKey(Article, on_delete=models.CASCADE, verbose_name='文章')
+    article = models.ForeignKey(Article, on_delete=models.CASCADE, verbose_name='文章')  # 外键
+
+    objects = models.Manager()
 
     class Meta:
         db_table = 'articlecomments'
         verbose_name = '文章评论'
 
     def __str__(self):
-        return self.article
+        return self.comment[0:10]
 
