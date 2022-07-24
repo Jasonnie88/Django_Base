@@ -1,9 +1,18 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 
 
 # Create your models here.
-class Article(models.Model):
+class CommModel(models.Model):
     objects = models.Manager()
+
+    class Meta:
+        # 此类可以当做父类，被其他model继承。字段自动过度给，继承的model
+        abstract = True  # 【django以后做数据库迁移时， 不再为CommModel类创建相关的表以及表结构了】
+
+
+class Article(CommModel):
+
     name = models.CharField(max_length=20, verbose_name='名称')
     content = models.CharField(max_length=300, verbose_name="文章内容")
     pub_date = models.DateField(verbose_name='发布日期', null=True)
@@ -20,7 +29,7 @@ class Article(models.Model):
         return self.name
 
 
-class PeopleInfo(models.Model):
+class PeopleInfo(CommModel):
     GENDER_CHOICES = (
         (0, 'male'),
         (1, 'female')
@@ -39,11 +48,9 @@ class PeopleInfo(models.Model):
         return self.name
 
 
-class ArticleComments(models.Model):
+class ArticleComments(CommModel):
     comment = models.CharField(max_length=200, null=True, verbose_name='文章评论')
     article = models.ForeignKey(Article, on_delete=models.CASCADE, verbose_name='文章')  # 外键
-
-    objects = models.Manager()
 
     class Meta:
         db_table = 'articlecomments'
@@ -51,4 +58,14 @@ class ArticleComments(models.Model):
 
     def __str__(self):
         return self.comment[0:10]
+
+
+class User(AbstractUser):
+    mobile = models.CharField(max_length=11, unique=True)
+    #objects = models.Manager()
+
+    class Meta:
+        db_table = 'tb_users'
+        verbose_name = "用户管理"
+        verbose_name_plural = verbose_name
 
