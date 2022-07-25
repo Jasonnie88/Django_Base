@@ -4,6 +4,6 @@ from . models import Article, PeopleInfo, ArticleComments, User
 admin.site.register(Article)
 admin.site.register(PeopleInfo)
 admin.site.register(ArticleComments)
-#admin.site.register(User)
+admin.site.register(User)
 
 
