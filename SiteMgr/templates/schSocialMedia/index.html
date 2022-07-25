@@ -4,10 +4,15 @@
 
 <h1>Index  Template</h1>
 <div>
+    <a href="{% url 'create-room' %}">创建房间</a>
     <div>
         {% for room in rooms %}
         <div>
+            <a href="{% url 'update-room' room.id %}">修改</a>
+            <a href="{% url 'delete-room' room.id %}">删除</a>
+            <span>@{{room.host.username}}</span>
             <h5>{{room.id}}---<a href="{% url 'room' room.id %}">{{room.name}}</a></h5>
+            <small>{{room.topic.name}}</small>
         </div>
         {% endfor %}
     </div>
