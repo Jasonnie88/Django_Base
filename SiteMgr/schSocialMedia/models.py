@@ -29,7 +29,8 @@ class AbstractArtModel(CommModel):
 
 
 class User(AbstractUser):
-    mobile = models.CharField(max_length=11, unique=True)
+
+    mobile = models.CharField(max_length=11, unique=True, verbose_name="手机")
     #objects = models.Manager()
 
     class Meta:
@@ -101,7 +102,7 @@ class Room(AbstractArtModel):
     host = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, verbose_name='主持人')
     topic = models.ForeignKey(Topic, on_delete=models.SET_NULL, null=True, verbose_name='主题')
 
-    #participants =
+    participants = models.ManyToManyField(User,related_name='participants',blank=True)
 
     class Meta:
         db_table = 'room'

@@ -2,20 +2,45 @@
 
 {% block content %}
 
-<h1>Index  Template</h1>
-<div>
-    <a href="{% url 'create-room' %}">创建房间</a>
+<style>
+    .container{
+        display:grid;
+        grid-template-columns: 1fr 3fr;
+    }
+</style>
+<div class="container">
     <div>
-        {% for room in rooms %}
+        <h3>主题</h3>
+        <hr>
         <div>
-            <a href="{% url 'update-room' room.id %}">修改</a>
-            <a href="{% url 'delete-room' room.id %}">删除</a>
-            <span>@{{room.host.username}}</span>
-            <h5>{{room.id}}---<a href="{% url 'room' room.id %}">{{room.name}}</a></h5>
-            <small>{{room.topic.name}}</small>
+            <a href="{% url 'index' %}">All</a>
         </div>
+        {% for topic in topics %}
+            <div>
+                <a href="{% url 'index' %}?q={{topic.name}}">{{topic.name}}</a>
+            </div>
+
         {% endfor %}
+
     </div>
+    <div>
+        <h5>{{room_count}} rooms available</h5>
+         <a href="{% url 'create-room' %}">创建房间</a>
+        <div>
+            {% for room in rooms %}
+            <div>
+                {% if request.user != room.host %}
+                <a href="{% url 'update-room' room.id %}">修改</a>
+                <a href="{% url 'delete-room' room.id %}">删除</a>
+                {% endif %}
+                <span>@{{room.host.username}}</span>
+                <h5>{{room.id}}---<a href="{% url 'room' room.id %}">{{room.name}}</a></h5>
+                <small>{{room.topic.name}}</small>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
 </div>
 
 {% endblock %}

@@ -1,0 +1,31 @@
+{% extends 'schSocialMedia/main.html' %}
+
+{% block content %}
+{% if page == 'login' %}
+<div>
+    <form method="POST" ACTION="">
+        {% csrf_token %}
+        <label>用户名：</label>
+        <input type="text" name="username" placeholder="输入用户名"/>
+
+        <label>密码：</label>
+        <input type="password" name="password" placeholder="密码"/>
+
+        <input type="submit" value="登录"/>
+    </form>
+    <p>还没有注册</p>
+    <a href="{% url 'register' %}">注册</a>
+</div>
+{% else %}
+<div>
+    <form method="POST" ACTION="">
+        {% csrf_token %}
+       {{form.as_p}}
+
+        <input type="submit" value="注册"/>
+    </form>
+     <p>已有用户</p>
+    <a href="{% url 'login' %}">登录</a>
+</div>
+{% endif %}
+{% endblock content %}

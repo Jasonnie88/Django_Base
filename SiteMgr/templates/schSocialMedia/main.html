@@ -7,6 +7,12 @@
 <body>
     {% include 'schSocialMedia\navbar.html' %}
 
+    <ul class="message">
+        {% for message in messages %}
+        <li >{{message}}</li>
+        {% endfor %}
+    </ul>
+
     {% block content %}
 
     {% endblock %}
