@@ -96,6 +96,8 @@ class Topic(CommModel):
 
 
 class Room(AbstractArtModel):
+    #name = models.CharField(max_length=200, verbose_name='名称')
+    content = models.TextField(max_length=600, verbose_name='描述')
     host = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, verbose_name='主持人')
     topic = models.ForeignKey(Topic, on_delete=models.SET_NULL, null=True, verbose_name='主题')
 
@@ -106,6 +108,9 @@ class Room(AbstractArtModel):
         verbose_name = '房间管理'
         verbose_name_plural = verbose_name
         ordering = ['-updated', '-pub_date']
+
+    def __str__(self):
+        return self.name
 
 
 class Message(CommModel):

@@ -7,11 +7,6 @@ from .forms import RoomForm
 
 
 # Create your views here.
-# rooms = [
-#     {'id': 1, 'name': 'lets learn python'},
-#     {'id': 2, 'name': 'Design with me'},
-#     {'id': 3, 'name': 'Frontend developers'},
-# ]
 
 def index(request):
     # atcl = Article.objects.get(id=1)
@@ -42,7 +37,6 @@ def createRoom(request):
     context = {'form': form}
     return render(request, "schSocialMedia/room_form.html", context)
 
-
 def updateRoom(request, pk):
 
     room = Room.objects.get(id=pk)
@@ -63,4 +57,4 @@ def deleteRoom(request, pk):
         room.delete()
         return redirect('index')
 
-    return render(request, "schSocialMedia/delete_room.html", {'obj': room})
+    return render(request, "schSocialMedia/delete.html", {'obj': room})
