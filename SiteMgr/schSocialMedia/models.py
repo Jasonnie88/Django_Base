@@ -122,10 +122,11 @@ class Message(CommModel):
     updated = models.DateTimeField(verbose_name='更新时间', auto_now=True)
 
     def __str__(self):
-        return self.content[0:10]
+        return self.content[0:50]
 
     class Meta:
         db_table = 'message'
+        ordering = ['-updated', '-pub_date']
         verbose_name = '信息管理'
         verbose_name_plural = verbose_name
 

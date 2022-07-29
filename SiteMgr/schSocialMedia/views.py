@@ -72,15 +72,19 @@ def index(request):
 
     room_count = rooms.count()
     topics = Topic.objects.all()
+    room_messages = Message.objects.filter(Q(room__topic__name__icontains=q))
 
-    content = {'rooms': rooms, 'topics': topics, 'room_count': room_count}
+    content = {'rooms': rooms,
+               'topics': topics,
+               'room_count': room_count,
+               'room_messages':room_messages}
     return render(request, "schSocialMedia/index.html", content)
     pass
 
 
 def room(request, pk):
     room = Room.objects.get(id=pk)
-    room_messages = room.message_set.all().order_by('-pub_date')
+    room_messages = room.message_set.all()
     participants = room.participants.all()
 
     if request.method == 'POST':
@@ -95,6 +99,16 @@ def room(request, pk):
     content = {'room': room,'room_messages': room_messages,'participants': participants}
     return render(request, "schSocialMedia/room.html", content)
 
+def userProfile(request, pk):
+    user = User.objects.get(id=pk)
+    rooms = user.room_set.all()
+    room_messages = user.message_set.all()
+
+    context = {'user': user ,
+               'rooms': rooms,
+               'room_messages': room_messages}
+
+    return render(request,'schSocialMedia/profile.html', context)
 
 @login_required(login_url='login')
 def createRoom(request):
@@ -103,7 +117,9 @@ def createRoom(request):
         print(request.POST)
         form = RoomForm(request.POST)
         if form.is_valid():
-            form.save()
+            room = form.save(commit=False)
+            room.host = request.user
+            room.save()
             return redirect('index')
 
     context = {'form': form}
@@ -152,6 +168,7 @@ def deleteMessage(request, pk):
 
     if request.method == 'POST':
         message.delete()
-        return redirect('room', pk=room.id)
+        return redirect('index')#redirect(request.META.get('HTTP_REFERER'))
+        #redirect(request.META.HTTP_REFERER, pk=room.id)
 
     return render(request, "schSocialMedia/delete.html", {'obj': message})
