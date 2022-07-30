@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from .models import ArticleComments, Article, User
 from django.shortcuts import render, redirect
 from django.db.models import Q
@@ -41,7 +41,12 @@ def loginPage(request):
 
 def logoutUser(request):
     logout(request)
-    return  redirect('index')
+    return redirect('index')
+
+def checkUsername(request):
+    q = request.GET.get('q') if request.GET.get('q') != None else ''
+    taken = User.objects.filter(username=q).count()
+    return JsonResponse({"taken": taken})
 
 def registerPage(request):
     page ='register'
