@@ -29,14 +29,49 @@ class AbstractArtModel(CommModel):
 
 
 class User(AbstractUser):
-
+    GENDER_CHOICES = (
+        (0, '男'),
+        (1, '女')
+    )
     mobile = models.CharField(max_length=11, unique=True, verbose_name="手机")
-    #objects = models.Manager()
+    gender = models.SmallIntegerField(choices=GENDER_CHOICES, default=0, verbose_name='性别')
+    hobies = models.TextField(max_length=600, null=True, verbose_name='爱好')
+    instruction = models.TextField(max_length=600, null=True, verbose_name='自我介绍')
+    friends = models.ManyToManyField('self', related_name='friends', blank=True, verbose_name='朋友')
 
     class Meta:
         db_table = 'tb_users'
         verbose_name = "用户管理"
         verbose_name_plural = verbose_name
+
+
+# class Friends(CommModel):
+#     oner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, verbose_name='主人')
+#     friend = models.ManyToManyField(User, related_name='friend', blank=True)
+#
+#
+#     class Meta:
+#         db_table = 'tb_friends'
+#         verbose_name = "朋友管理"
+#         verbose_name_plural = verbose_name
+
+
+class MessageBoard(CommModel):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    #friends = models.ForeignKey(User, on_delete=models.CASCADE)
+    #freind = models.ForeignKey(Friends, on_delete=models.CASCADE)
+    content = models.TextField()
+    pub_date = models.DateTimeField(verbose_name='发布时间', auto_now_add=True)
+    updated = models.DateTimeField(verbose_name='更新时间', auto_now=True)
+
+    class Meta:
+        db_table = 'tb_messageboard'
+        verbose_name = "留言版"
+        verbose_name_plural = verbose_name
+        ordering = ['-updated', '-pub_date']
+
+    def __str__(self):
+        return self.content[0:50]
 
 
 class Article(AbstractArtModel):
@@ -46,7 +81,6 @@ class Article(AbstractArtModel):
         db_table = 'articleinfo'  # 指明数据库表名
         verbose_name = '文章'  # 在admin站点中显示的名称
         verbose_name_plural = verbose_name
-
 
 
 
@@ -102,7 +136,7 @@ class Room(AbstractArtModel):
     host = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, verbose_name='主持人')
     topic = models.ForeignKey(Topic, on_delete=models.SET_NULL, null=True, verbose_name='主题')
 
-    participants = models.ManyToManyField(User,related_name='participants',blank=True)
+    participants = models.ManyToManyField(User, related_name='participants', blank=True, verbose_name='参与人员')
 
     class Meta:
         db_table = 'room'
