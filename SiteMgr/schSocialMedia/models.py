@@ -46,9 +46,8 @@ class User(AbstractUser):
 
 
 # class Friends(CommModel):
-#     oner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, verbose_name='主人')
+#     oner = models.ForeignKey(User, on_delete=models.CASCADE, null=True, verbose_name='主人')
 #     friend = models.ManyToManyField(User, related_name='friend', blank=True)
-#
 #
 #     class Meta:
 #         db_table = 'tb_friends'
@@ -57,8 +56,9 @@ class User(AbstractUser):
 
 
 class MessageBoard(CommModel):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    #friends = models.ForeignKey(User, on_delete=models.CASCADE)
+    friend = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='朋友')
+    sendor = models.CharField(max_length=150,null=True)
+    # friend = models.ForeignKey(User, on_delete=models.CASCADE)
     #freind = models.ForeignKey(Friends, on_delete=models.CASCADE)
     content = models.TextField()
     pub_date = models.DateTimeField(verbose_name='发布时间', auto_now_add=True)
