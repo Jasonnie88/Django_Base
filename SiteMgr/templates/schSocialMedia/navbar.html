@@ -23,6 +23,12 @@
 
       <!-- Logged In -->
     {% if request.user.is_authenticated %}
+      <div class="header__friend">
+        <ul>
+          <li><a href="">通讯录</a> </li>
+          <li><a href="">发布文章</a> </li>
+        </ul>
+      </div>
       <div class="header__user">
         <a href="/profile/{{request.user.id}}">
           <div class="avatar avatar--medium active">

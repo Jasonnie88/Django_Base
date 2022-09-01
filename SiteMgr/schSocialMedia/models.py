@@ -57,7 +57,7 @@ class User(AbstractUser):
 
 class MessageBoard(CommModel):
     friend = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='朋友')
-    sendor = models.CharField(max_length=150,null=True)
+    sender = models.CharField(max_length=150, null=True)
     # friend = models.ForeignKey(User, on_delete=models.CASCADE)
     #freind = models.ForeignKey(Friends, on_delete=models.CASCADE)
     content = models.TextField()
